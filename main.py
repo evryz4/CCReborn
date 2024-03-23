@@ -1,5 +1,6 @@
 # CookieClicker Reborn 1.0
-# https://github.com/watermelon46/CCReborn
+# https://github.com/evryz4/CCReborn
+# forked https://github.com/watermelon46/CCReborn
 
 import time
 import os
@@ -96,7 +97,7 @@ cache = None # Переменная для хранения всякой фиг�
 
 init()
 clear()
-print(f'{Fore.YELLOW + Style.BRIGHT}CookieClicker {Style.RESET_ALL + Fore.YELLOW}Reborn {Fore.RESET}v{config["ccVerInfo"]} {config["ccVerType"]}\n{Style.RESET_ALL}Пропиши help для просмотра списка команд\n{Style.BRIGHT}Нажми Enter, чтобы начать{Style.RESET_ALL}')
+print(f'{Fore.YELLOW + Style.BRIGHT}CookieClicker {Style.RESET_ALL + Fore.YELLOW}Reborn [evryz4`s fork] {Fore.RESET}v{config["ccVerInfo"]} {config["ccVerType"]}\n{Style.RESET_ALL}Пропиши help для просмотра списка команд\nСуть игры в том, чтобы нажимать любой символ + enter (во избежание простого зажимания enter)')
 
 # /\ /\ Последняя версия CookieClicker Classic вышла в мае 2023 года, и была полным говнокодом.
 #       Именно поэтому CookieClicker Classic больше не быть, и хлнм принял решение переписать CookieClicker с нуля.
@@ -109,24 +110,7 @@ while True: # Ну чтож, погнали!
         print('Тебе трудно прописать exit?')
         os.system('pause')
     clear()
-    if command == '':
-        summaryClick = player['boosters'] + 1
-        player['cookies'] += summaryClick
-        if clickerActive == True:
-            
-            clickerActiveAgo = int(time.time() - clickerActiveTime)
-            clickSecondsNeed = int(time.time() - clickerLastClick)
-            if clickerActiveAgo > 300:
-                player['cookies'] += summaryClick * 300
-                clickerActive = False
-            else:
-                player['cookies'] += summaryClick * clickSecondsNeed
-            clickerLastClick = time.time()
-            toClickerEnd = 300 - clickerActiveAgo
-        print(f'{Fore.GREEN + Style.BRIGHT}🍪 Клик!\n\nВаш баланс:\n {Style.RESET_ALL + Fore.YELLOW}Печеньки: {Style.RESET_ALL}{player["cookies"]}\n {Fore.YELLOW}Монетки: {Style.RESET_ALL}{player["coins"]}\n {Fore.YELLOW}Арбузы: {Style.RESET_ALL}{player["watermelons"]}\n {Fore.YELLOW}Бустеры: {Style.RESET_ALL}{player["boosters"]}\n {Fore.YELLOW}Кликеры: {Style.RESET_ALL}{player["clickers"]}')
-        if clickerActive:
-            print(f'{Fore.GREEN + Style.BRIGHT}ℹ До конца кликера осталось {toClickerEnd} сек.')
-    elif command == 'exit':
+    if command == 'exit':
         print(f'{Fore.RED + Style.BRIGHT}Сохранить игру перед выходом? [Y/N]')
         if reInput() == 'Y':
             save()
@@ -142,7 +126,7 @@ while True: # Ну чтож, погнали!
     elif command == 'load':
         load()
     elif command == 'help':
-        print(f"{Fore.GREEN + Style.BRIGHT}ℹ Команды CookieClicker'а\n\n{Style.RESET_ALL + Fore.YELLOW}help - {Style.RESET_ALL}это меню\n{Style.RESET_ALL + Fore.YELLOW}exchange - {Style.RESET_ALL}обменять печеньки на монетки с курсом 100 печенек к 1 монетке\n{Style.RESET_ALL + Fore.YELLOW}shop - {Style.RESET_ALL}магазин\n{Style.RESET_ALL + Fore.YELLOW}clicker - {Style.RESET_ALL}запустить автокликер\n{Style.RESET_ALL + Fore.YELLOW}save - {Style.RESET_ALL}сохранить игру\n{Style.RESET_ALL + Fore.YELLOW}load - {Style.RESET_ALL}загрузить игру\n{Style.RESET_ALL + Fore.YELLOW}exit - {Style.RESET_ALL}покинуть игру")
+        print(f"{Fore.GREEN + Style.BRIGHT}ℹ Команды CookieClicker'а\n\n{Style.RESET_ALL + Fore.YELLOW}help - {Style.RESET_ALL}это меню\n{Style.RESET_ALL + Fore.YELLOW}exchange - {Style.RESET_ALL}обменять печеньки на монетки с курсом 100 печенек к 1 монетке\n{Style.RESET_ALL + Fore.YELLOW}shop - {Style.RESET_ALL}магазин\n{Style.RESET_ALL + Fore.YELLOW}clicker - {Style.RESET_ALL}запустить автокликер\n{Style.RESET_ALL + Fore.YELLOW}save - {Style.RESET_ALL}сохранить игру\n{Style.RESET_ALL + Fore.YELLOW}load - {Style.RESET_ALL}загрузить игру\n{Style.RESET_ALL + Fore.YELLOW}exit - {Style.RESET_ALL}покинуть игру\n{Style.RESET_ALL + Fore.YELLOW}не пустая строка (не команда) - {Style.RESET_ALL}клик (+2 печеньки)")
     elif command == 'reloadSysCompat':
         print(f"{Fore.GREEN + Style.BRIGHT}⏳ Перезагружаем SysCompat...{Style.RESET_ALL}")
         SysCompat()
@@ -184,3 +168,20 @@ while True: # Ну чтож, погнали!
             clickerActiveTime = time.time()
             clickerLastClick = clickerActiveTime
             print(f"{Fore.GREEN + Style.BRIGHT}✔ Кликер запущен!{Style.RESET_ALL}")
+    elif len(command) > 0:
+        summaryClick = player['boosters'] + 2
+        player['cookies'] += summaryClick
+        if clickerActive == True:
+            
+            clickerActiveAgo = int(time.time() - clickerActiveTime)
+            clickSecondsNeed = int(time.time() - clickerLastClick)
+            if clickerActiveAgo > 300:
+                player['cookies'] += summaryClick * 300
+                clickerActive = False
+            else:
+                player['cookies'] += summaryClick * clickSecondsNeed
+            clickerLastClick = time.time()
+            toClickerEnd = 300 - clickerActiveAgo
+        print(f'{Fore.GREEN + Style.BRIGHT}🍪 Клик!\n\nВаш баланс:\n {Style.RESET_ALL + Fore.YELLOW}Печеньки: {Style.RESET_ALL}{player["cookies"]}\n {Fore.YELLOW}Монетки: {Style.RESET_ALL}{player["coins"]}\n {Fore.YELLOW}Арбузы: {Style.RESET_ALL}{player["watermelons"]}\n {Fore.YELLOW}Бустеры: {Style.RESET_ALL}{player["boosters"]}\n {Fore.YELLOW}Кликеры: {Style.RESET_ALL}{player["clickers"]}')
+        if clickerActive:
+            print(f'{Fore.GREEN + Style.BRIGHT}ℹ До конца кликера осталось {toClickerEnd} сек.')
