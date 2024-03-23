@@ -6,6 +6,7 @@ import time
 import os
 import json
 from platform import uname
+from random import randint
 
 clickerActive = False
 clickerActiveTime = 0
@@ -97,7 +98,7 @@ cache = None # Переменная для хранения всякой фиг�
 
 init()
 clear()
-print(f'{Fore.YELLOW + Style.BRIGHT}CookieClicker {Style.RESET_ALL + Fore.YELLOW}Reborn [evryz4`s fork] {Fore.RESET}v{config["ccVerInfo"]} {config["ccVerType"]}\n{Style.RESET_ALL}Пропиши help для просмотра списка команд\nСуть игры в том, чтобы нажимать любой символ + enter (во избежание простого зажимания enter)')
+print(f'{Fore.YELLOW + Style.BRIGHT}CookieClicker {Style.RESET_ALL + Fore.YELLOW}Reborn [evryz4`s fork] {Fore.RESET}v{config["ccVerInfo"]} {config["ccVerType"]}\n{Style.RESET_ALL}Пропиши help для просмотра списка команд\nСуть игры в том, чтобы нажимать любой символ + enter (во избежание простого зажимания enter)\nС вероятностью 25% у вас будет удачный клик, который дает +5 печенек')
 
 # /\ /\ Последняя версия CookieClicker Classic вышла в мае 2023 года, и была полным говнокодом.
 #       Именно поэтому CookieClicker Classic больше не быть, и хлнм принял решение переписать CookieClicker с нуля.
@@ -116,25 +117,32 @@ while True: # Ну чтож, погнали!
             save()
         break
         exit()
+    
     elif command == 'exchange':
         cache = player['cookies'] / 100
         player['coins'] = player['coins'] + player['cookies'] / 100 + player['watermelons'] / 10
         player['cookies'] = 0
         print(f'{Fore.GREEN + Style.BRIGHT}💱 Ваши печеньки были обменены на монетки ({cache})')
+    
     elif command == 'save':
         save()
+    
     elif command == 'load':
         load()
+    
     elif command == 'help':
         print(f"{Fore.GREEN + Style.BRIGHT}ℹ Команды CookieClicker'а\n\n{Style.RESET_ALL + Fore.YELLOW}help - {Style.RESET_ALL}это меню\n{Style.RESET_ALL + Fore.YELLOW}exchange - {Style.RESET_ALL}обменять печеньки на монетки с курсом 100 печенек к 1 монетке\n{Style.RESET_ALL + Fore.YELLOW}shop - {Style.RESET_ALL}магазин\n{Style.RESET_ALL + Fore.YELLOW}clicker - {Style.RESET_ALL}запустить автокликер\n{Style.RESET_ALL + Fore.YELLOW}save - {Style.RESET_ALL}сохранить игру\n{Style.RESET_ALL + Fore.YELLOW}load - {Style.RESET_ALL}загрузить игру\n{Style.RESET_ALL + Fore.YELLOW}exit - {Style.RESET_ALL}покинуть игру\n{Style.RESET_ALL + Fore.YELLOW}не пустая строка (не команда) - {Style.RESET_ALL}клик (+2 печеньки)")
+    
     elif command == 'reloadSysCompat':
         print(f"{Fore.GREEN + Style.BRIGHT}⏳ Перезагружаем SysCompat...{Style.RESET_ALL}")
         SysCompat()
         clear()
         print(f"{Fore.GREEN + Style.BRIGHT}✔ SysCompat успешно перезагружен, но зачем?{Style.RESET_ALL}")
+    
     elif command == 'shop':
         shopcancel = 0
         print(f"{Fore.GREEN + Style.BRIGHT}ℹ Магазин\nДля покупки введите код продукта\n{Style.RESET_ALL + Fore.YELLOW}Бустер (1) - {Style.RESET_ALL}5 монет\n{Style.RESET_ALL + Fore.YELLOW}Кликер (2) - {Style.RESET_ALL}10 монет\n{Style.RESET_ALL + Fore.YELLOW}Арбуз (3) - {Style.RESET_ALL}20 монет\n{Style.RESET_ALL}")
+        print(f'{Fore.GREEN + Style.BRIGHT}Ваш баланс:\n {Style.RESET_ALL + Fore.YELLOW}Печеньки: {Style.RESET_ALL}{player["cookies"]}\n {Fore.YELLOW}Монетки: {Style.RESET_ALL}{player["coins"]}\n {Fore.YELLOW}Арбузы: {Style.RESET_ALL}{player["watermelons"]}\n {Fore.YELLOW}Бустеры: {Style.RESET_ALL}{player["boosters"]}\n {Fore.YELLOW}Кликеры: {Style.RESET_ALL}{player["clickers"]}\n')
         shopinput = reInput()
         if shopinput == '1':
             if player['coins'] >= 5:
@@ -143,6 +151,7 @@ while True: # Ну чтож, погнали!
                 print(f"{Fore.GREEN + Style.BRIGHT}✔ Вы успешно купили 1 бустер!{Style.RESET_ALL}")
             else:
                 shopcancel = 1
+        
         elif shopinput == '2':
             if player['coins'] >= 10:
                 player['coins'] -= 10
@@ -150,6 +159,7 @@ while True: # Ну чтож, погнали!
                 print(f"{Fore.GREEN + Style.BRIGHT}✔ Вы успешно купили 1 кликер! Он работает 5 минут, для его включения напишите clicker{Style.RESET_ALL}")
             else:
                 shopcancel = 1
+        
         elif shopinput == '3':
             if player['coins'] >= 20:
                 player['coins'] -= 20
@@ -159,6 +169,7 @@ while True: # Ну чтож, погнали!
                 shopcancel = 1
         if shopcancel == 1:
             print(f"{Fore.YELLOW + Style.BRIGHT}❌ Неверный код продукта или недостаточно монет!{Style.RESET_ALL}")
+    
     elif command == 'clicker':
         if player['clickers'] < 1:
             print(f"{Fore.YELLOW + Style.BRIGHT}❌ У вас нет кликеров!{Style.RESET_ALL}")
@@ -168,9 +179,14 @@ while True: # Ну чтож, погнали!
             clickerActiveTime = time.time()
             clickerLastClick = clickerActiveTime
             print(f"{Fore.GREEN + Style.BRIGHT}✔ Кликер запущен!{Style.RESET_ALL}")
+
     elif len(command) > 0:
-        summaryClick = player['boosters'] + 2
+        luckyclick = randint(1, 4) == 1
+        summaryClick = player['boosters'] + 1
+        if luckyclick:
+            summaryClick += 5
         player['cookies'] += summaryClick
+
         if clickerActive == True:
             
             clickerActiveAgo = int(time.time() - clickerActiveTime)
@@ -182,6 +198,13 @@ while True: # Ну чтож, погнали!
                 player['cookies'] += summaryClick * clickSecondsNeed
             clickerLastClick = time.time()
             toClickerEnd = 300 - clickerActiveAgo
-        print(f'{Fore.GREEN + Style.BRIGHT}🍪 Клик!\n\nВаш баланс:\n {Style.RESET_ALL + Fore.YELLOW}Печеньки: {Style.RESET_ALL}{player["cookies"]}\n {Fore.YELLOW}Монетки: {Style.RESET_ALL}{player["coins"]}\n {Fore.YELLOW}Арбузы: {Style.RESET_ALL}{player["watermelons"]}\n {Fore.YELLOW}Бустеры: {Style.RESET_ALL}{player["boosters"]}\n {Fore.YELLOW}Кликеры: {Style.RESET_ALL}{player["clickers"]}')
+        
+        if luckyclick:
+            print(f'{Fore.GREEN + Style.BRIGHT}🍪 Удачный клик!\n\n')
+        else:
+            print(f'{Fore.GREEN + Style.BRIGHT}🍪 Клик!\n\n')
+        
+        print(f'Ваш баланс:\n {Style.RESET_ALL + Fore.YELLOW}Печеньки: {Style.RESET_ALL}{player["cookies"]}\n {Fore.YELLOW}Монетки: {Style.RESET_ALL}{player["coins"]}\n {Fore.YELLOW}Арбузы: {Style.RESET_ALL}{player["watermelons"]}\n {Fore.YELLOW}Бустеры: {Style.RESET_ALL}{player["boosters"]}\n {Fore.YELLOW}Кликеры: {Style.RESET_ALL}{player["clickers"]}')
+        
         if clickerActive:
             print(f'{Fore.GREEN + Style.BRIGHT}ℹ До конца кликера осталось {toClickerEnd} сек.')
